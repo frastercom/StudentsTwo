@@ -63,6 +63,7 @@ namespace StudentsTwo {
 		System::ComponentModel::Container ^components;
 		bool isPaint; //Ôëàæîê "ðèñîâàòü"
 		bool isEncircle; //Ôëàæîê "Îáâîäêè"
+		bool isFloodFill; //Ôëàæîê "çàêðàñêè"
 		Graphics^ MyGraphics; //Îáúåêò Graphics äëÿ ðèñîâàíèÿ
 		Pen^ MyPen; //Ïåðî äëÿ ðèñîâàíèÿ
 		Point p; //Ïîñëåäíÿÿ òî÷êà, ãäå ðèñîâàëè
@@ -121,28 +122,28 @@ namespace StudentsTwo {
 			// îòêðûòüToolStripMenuItem
 			// 
 			this->îòêðûòüToolStripMenuItem->Name = L"îòêðûòüToolStripMenuItem";
-			this->îòêðûòüToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->îòêðûòüToolStripMenuItem->Size = System::Drawing::Size(154, 22);
 			this->îòêðûòüToolStripMenuItem->Text = L"Îòêðûòü";
 			this->îòêðûòüToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::îòêðûòüToolStripMenuItem_Click);
 			// 
 			// ñîõðàíèòüToolStripMenuItem
 			// 
 			this->ñîõðàíèòüToolStripMenuItem->Name = L"ñîõðàíèòüToolStripMenuItem";
-			this->ñîõðàíèòüToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->ñîõðàíèòüToolStripMenuItem->Size = System::Drawing::Size(154, 22);
 			this->ñîõðàíèòüToolStripMenuItem->Text = L"Ñîõðàíèòü";
 			this->ñîõðàíèòüToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::ñîõðàíèòüToolStripMenuItem_Click);
 			// 
 			// ñîõðàíèòüÊàêToolStripMenuItem
 			// 
 			this->ñîõðàíèòüÊàêToolStripMenuItem->Name = L"ñîõðàíèòüÊàêToolStripMenuItem";
-			this->ñîõðàíèòüÊàêToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->ñîõðàíèòüÊàêToolStripMenuItem->Size = System::Drawing::Size(154, 22);
 			this->ñîõðàíèòüÊàêToolStripMenuItem->Text = L"Ñîõðàíèòü êàê";
 			this->ñîõðàíèòüÊàêToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::ñîõðàíèòüÊàêToolStripMenuItem_Click);
 			// 
 			// âûõîäToolStripMenuItem
 			// 
 			this->âûõîäToolStripMenuItem->Name = L"âûõîäToolStripMenuItem";
-			this->âûõîäToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->âûõîäToolStripMenuItem->Size = System::Drawing::Size(154, 22);
 			this->âûõîäToolStripMenuItem->Text = L"Âûõîä";
 			// 
 			// îÏðîãðàììåToolStripMenuItem
@@ -155,7 +156,7 @@ namespace StudentsTwo {
 			// ñïðàâêàToolStripMenuItem
 			// 
 			this->ñïðàâêàToolStripMenuItem->Name = L"ñïðàâêàToolStripMenuItem";
-			this->ñïðàâêàToolStripMenuItem->Size = System::Drawing::Size(180, 22);
+			this->ñïðàâêàToolStripMenuItem->Size = System::Drawing::Size(120, 22);
 			this->ñïðàâêàToolStripMenuItem->Text = L"Ñïðàâêà";
 			// 
 			// pictureBox1
@@ -163,7 +164,6 @@ namespace StudentsTwo {
 			this->pictureBox1->Location = System::Drawing::Point(122, 27);
 			this->pictureBox1->Name = L"pictureBox1";
 			this->pictureBox1->Size = System::Drawing::Size(969, 524);
-			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
 			this->pictureBox1->TabIndex = 1;
 			this->pictureBox1->TabStop = false;
 			this->pictureBox1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::pictureBox1_Paint);
@@ -179,6 +179,7 @@ namespace StudentsTwo {
 			this->button1->TabIndex = 2;
 			this->button1->Text = L"Çàëèâêà";
 			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
 			// 
 			// button2
 			// 
@@ -293,5 +294,7 @@ namespace StudentsTwo {
 	private: System::Void button8_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void ñîõðàíèòüToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
+	private: System::Void FloodFill(Bitmap^ bmp, Point pt, Color targetColor, Color replacementColor);
+	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e);
 };
 }
