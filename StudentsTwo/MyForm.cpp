@@ -80,6 +80,7 @@ System::Void StudentsTwo::MyForm::pictureBox1_MouseMove(System::Object^ sender, 
 {
 	if (!isPaint || !isEncircle) return;
 	else if (p.X != e->X || p.Y != e->Y) {
+		Graphics::FromImage(pictureBox1->Image)->DrawLine(MyPen, p.X, p.Y, e->X, e->Y);
 		p.X = e->X; p.Y = e->Y;
 		pictureBox1->Refresh();
 	}
@@ -136,6 +137,7 @@ System::Void StudentsTwo::MyForm::button8_Click(System::Object^ sender, System::
 System::Void StudentsTwo::MyForm::button2_Click(System::Object^ sender, System::EventArgs^ e)
 {
 	isEncircle = true;
+	isFloodFill = false;
 	return System::Void();
 }
 
@@ -219,6 +221,6 @@ System::Void StudentsTwo::MyForm::FloodFill(Bitmap^ bmp, Point pt, Color targetC
 System::Void StudentsTwo::MyForm::button1_Click(System::Object^ sender, System::EventArgs^ e)
 {
 	isFloodFill = true;
-	isPaint = false;
+	isEncircle = false;
 	return System::Void();
 }
