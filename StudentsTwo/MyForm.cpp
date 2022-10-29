@@ -11,7 +11,14 @@ using namespace System;
 using namespace System::Drawing;
 using namespace System::Windows::Forms;
 
-
+/*
+* Справочная информация взята с:
+* http://blog.kislenko.net/show.php?id=1628
+* 
+* заливка:
+* Scan-line fill in C#:
+* https://simpledevcode.wordpress.com/2015/12/29/flood-fill-algorithm-using-c-net/
+*/
 
 [STAThread]
 void main()
