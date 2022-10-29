@@ -64,10 +64,12 @@ namespace StudentsTwo {
 		bool isPaint; //Флажок "рисовать"
 		bool isEncircle; //Флажок "Обводки"
 		bool isFloodFill; //Флажок "закраски"
+		bool isCircle = false; //флаг необходимости отображения обводки
 		Graphics^ MyGraphics; //Объект Graphics для рисования
 		Pen^ MyPen; //Перо для рисования
 		Point p; //Последняя точка, где рисовали
-		System::String^ fileName;
+	private: System::Windows::Forms::CheckBox^ checkBox1;
+		   System::String^ fileName;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -93,6 +95,7 @@ namespace StudentsTwo {
 			this->button6 = (gcnew System::Windows::Forms::Button());
 			this->button7 = (gcnew System::Windows::Forms::Button());
 			this->button8 = (gcnew System::Windows::Forms::Button());
+			this->checkBox1 = (gcnew System::Windows::Forms::CheckBox());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->SuspendLayout();
@@ -173,7 +176,7 @@ namespace StudentsTwo {
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(12, 28);
+			this->button1->Location = System::Drawing::Point(11, 85);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(104, 23);
 			this->button1->TabIndex = 2;
@@ -183,7 +186,7 @@ namespace StudentsTwo {
 			// 
 			// button2
 			// 
-			this->button2->Location = System::Drawing::Point(12, 58);
+			this->button2->Location = System::Drawing::Point(12, 138);
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(104, 23);
 			this->button2->TabIndex = 3;
@@ -194,7 +197,7 @@ namespace StudentsTwo {
 			// button3
 			// 
 			this->button3->BackColor = System::Drawing::Color::Red;
-			this->button3->Location = System::Drawing::Point(13, 88);
+			this->button3->Location = System::Drawing::Point(12, 27);
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(29, 23);
 			this->button3->TabIndex = 4;
@@ -204,7 +207,7 @@ namespace StudentsTwo {
 			// button4
 			// 
 			this->button4->BackColor = System::Drawing::Color::Yellow;
-			this->button4->Location = System::Drawing::Point(48, 88);
+			this->button4->Location = System::Drawing::Point(47, 27);
 			this->button4->Name = L"button4";
 			this->button4->Size = System::Drawing::Size(29, 23);
 			this->button4->TabIndex = 5;
@@ -214,7 +217,7 @@ namespace StudentsTwo {
 			// button5
 			// 
 			this->button5->BackColor = System::Drawing::Color::Green;
-			this->button5->Location = System::Drawing::Point(83, 88);
+			this->button5->Location = System::Drawing::Point(82, 27);
 			this->button5->Name = L"button5";
 			this->button5->Size = System::Drawing::Size(29, 23);
 			this->button5->TabIndex = 6;
@@ -224,7 +227,7 @@ namespace StudentsTwo {
 			// button6
 			// 
 			this->button6->BackColor = System::Drawing::Color::Blue;
-			this->button6->Location = System::Drawing::Point(12, 117);
+			this->button6->Location = System::Drawing::Point(11, 56);
 			this->button6->Name = L"button6";
 			this->button6->Size = System::Drawing::Size(29, 23);
 			this->button6->TabIndex = 7;
@@ -234,7 +237,7 @@ namespace StudentsTwo {
 			// button7
 			// 
 			this->button7->BackColor = System::Drawing::Color::White;
-			this->button7->Location = System::Drawing::Point(47, 117);
+			this->button7->Location = System::Drawing::Point(46, 56);
 			this->button7->Name = L"button7";
 			this->button7->Size = System::Drawing::Size(29, 23);
 			this->button7->TabIndex = 8;
@@ -244,18 +247,29 @@ namespace StudentsTwo {
 			// button8
 			// 
 			this->button8->BackColor = System::Drawing::Color::Black;
-			this->button8->Location = System::Drawing::Point(82, 117);
+			this->button8->Location = System::Drawing::Point(81, 56);
 			this->button8->Name = L"button8";
 			this->button8->Size = System::Drawing::Size(29, 23);
 			this->button8->TabIndex = 9;
 			this->button8->UseVisualStyleBackColor = false;
 			this->button8->Click += gcnew System::EventHandler(this, &MyForm::button8_Click);
 			// 
+			// checkBox1
+			// 
+			this->checkBox1->AutoSize = true;
+			this->checkBox1->Location = System::Drawing::Point(11, 115);
+			this->checkBox1->Name = L"checkBox1";
+			this->checkBox1->Size = System::Drawing::Size(76, 17);
+			this->checkBox1->TabIndex = 10;
+			this->checkBox1->Text = L"Линейная";
+			this->checkBox1->UseVisualStyleBackColor = true;
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1103, 563);
+			this->Controls->Add(this->checkBox1);
 			this->Controls->Add(this->button8);
 			this->Controls->Add(this->button7);
 			this->Controls->Add(this->button6);
@@ -294,7 +308,8 @@ namespace StudentsTwo {
 	private: System::Void button8_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void сохранитьToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
-	private: System::Void FloodFill(Bitmap^ bmp, Point pt, Color targetColor, Color replacementColor);
+	private: System::Void FloodFill(Bitmap^ bmp, Point pt, Color replacementColor);
+	private: System::Void FloodFillLine(Bitmap^ bmp, Point pt, Color replacementColor);
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e);
 };
 }

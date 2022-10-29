@@ -59,9 +59,7 @@ System::Void StudentsTwo::MyForm::pictureBox1_Paint(System::Object^ sender, Syst
 System::Void StudentsTwo::MyForm::pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
 {
 	if (isFloodFill) {
-		isFloodFill = false;
-		FloodFill(gcnew Bitmap(pictureBox1->Image), Point(e->X, e->Y), MyPen->Color, MyPen->Color);
-		pictureBox1->Refresh();
+		FloodFillLine(gcnew Bitmap(pictureBox1->Image), Point(e->X, e->Y), MyPen->Color);
 		return System::Void();
 	}
 	p.X = e->X; p.Y = e->Y;
@@ -95,6 +93,7 @@ System::Void StudentsTwo::MyForm::MyForm_Load(System::Object^ sender, System::Ev
 	isPaint = false;
 	p.X = -1; p.Y = -1;
 	fileName = nullptr;
+	button2->Visible = isCircle;
 	return System::Void();
 }
 
@@ -158,9 +157,9 @@ System::Void StudentsTwo::MyForm::ñîõðàíèòüToolStripMenuItem_Click(System::Objec
 	return System::Void();
 }
 
-System::Void StudentsTwo::MyForm::FloodFill(Bitmap^ bmp, Point pt, Color targetColor, Color replacementColor)
+System::Void StudentsTwo::MyForm::FloodFill(Bitmap^ bmp, Point pt, Color replacementColor)
 {
-	targetColor = bmp->GetPixel(pt.X, pt.Y);
+	Color targetColor = bmp->GetPixel(pt.X, pt.Y);
 	if (targetColor.ToArgb().Equals(replacementColor.ToArgb()))
 	{
 		return;
@@ -214,7 +213,33 @@ System::Void StudentsTwo::MyForm::FloodFill(Bitmap^ bmp, Point pt, Color targetC
 		}
 
 	}
-	pictureBox1->Image = bmp;
+
+	return System::Void();
+}
+
+System::Void StudentsTwo::MyForm::FloodFillLine(Bitmap^ bmp1, Point pt, Color replacementColor)
+{
+	if (checkBox1->Checked == true) {
+		Bitmap^ bmp = gcnew Bitmap(pictureBox1->Image);
+
+		FloodFill(bmp, pt, replacementColor);
+
+		for (int x = 1; x < bmp->Width; x++)
+		{
+			for (int y = 1; y < bmp->Height; y++)
+			{
+				if (bmp->GetPixel(x, y) != bmp1->GetPixel(x, y) && y % 30 < 15) {
+					bmp1->SetPixel(x, y, replacementColor);
+				}
+			}
+		}
+	}
+	else
+	{
+		FloodFill(bmp1, pt, replacementColor);
+	}
+	pictureBox1->Image = bmp1;
+	pictureBox1->Refresh();
 	return System::Void();
 }
 
