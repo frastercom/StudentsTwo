@@ -23,12 +23,14 @@ void main()
 	Application::Run(% form);
 }
 
+/*
+* Открытие файла изображения (с использованием OpenDialog)
+* 
+*/
 System::Void StudentsTwo::MyForm::открытьToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 {
 	OpenFileDialog^ ofd = gcnew OpenFileDialog();
 	ofd->Filter = "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*";
-	//insert here the filter if you want
-	//ofd->Filter..
 	if (ofd->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 		fileName = ofd->FileName;
 		pictureBox1->Image = Image::FromFile(fileName);
@@ -37,6 +39,10 @@ System::Void StudentsTwo::MyForm::открытьToolStripMenuItem_Click(System::Object^
 	return System::Void();
 }
 
+/*
+* Сохранить как, изображение (с использованием SaveDialog)
+*
+*/
 System::Void StudentsTwo::MyForm::сохранитьКакToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 {
 	SaveFileDialog^ sfd = gcnew SaveFileDialog();
@@ -56,24 +62,37 @@ System::Void StudentsTwo::MyForm::pictureBox1_Paint(System::Object^ sender, Syst
 	return System::Void();
 }
 
+/*
+* Левая клваиша мыши нажата
+*/
 System::Void StudentsTwo::MyForm::pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
 {
 	if (isFloodFill) {
+		//заливка
 		FloodFillLine(gcnew Bitmap(pictureBox1->Image), Point(e->X, e->Y), MyPen->Color);
 		return System::Void();
 	}
-	p.X = e->X; p.Y = e->Y;
-	isPaint = true;
+	else {
+		p.X = e->X; p.Y = e->Y;
+		isPaint = true;
+	}
+	
 	return System::Void();
 }
 
+/*
+* Левая клваиша мыши отпущена
+*/
 System::Void StudentsTwo::MyForm::pictureBox1_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
 {
 	isPaint = false;
-	isFloodFill = false;
 	return System::Void();
 }
 
+
+/*
+* Рисуем обводку
+*/
 System::Void StudentsTwo::MyForm::pictureBox1_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
 {
 	if (!isPaint || !isEncircle) return;
@@ -85,6 +104,9 @@ System::Void StudentsTwo::MyForm::pictureBox1_MouseMove(System::Object^ sender, 
 	return System::Void();
 }
 
+/*
+* заполняем нужные поля при загрузке формы
+*/
 System::Void StudentsTwo::MyForm::MyForm_Load(System::Object^ sender, System::EventArgs^ e)
 {
 	MyGraphics = pictureBox1->CreateGraphics();
@@ -97,6 +119,9 @@ System::Void StudentsTwo::MyForm::MyForm_Load(System::Object^ sender, System::Ev
 	return System::Void();
 }
 
+/*
+* bytton3 - button8 выбор цвета
+*/
 System::Void StudentsTwo::MyForm::button3_Click(System::Object^ sender, System::EventArgs^ e)
 {
 	MyPen = gcnew Pen(Color::Red, 2.5);
@@ -133,6 +158,9 @@ System::Void StudentsTwo::MyForm::button8_Click(System::Object^ sender, System::
 	return System::Void();
 }
 
+/*
+* Запоминаем выбор обводки
+*/
 System::Void StudentsTwo::MyForm::button2_Click(System::Object^ sender, System::EventArgs^ e)
 {
 	isEncircle = true;
@@ -140,13 +168,16 @@ System::Void StudentsTwo::MyForm::button2_Click(System::Object^ sender, System::
 	return System::Void();
 }
 
+
+/*
+* Сохранить, изображение (с использованием SaveDialog)
+*
+*/
 System::Void StudentsTwo::MyForm::сохранитьToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 {
 	if (fileName == nullptr) {
 		SaveFileDialog^ sfd = gcnew SaveFileDialog();
 		sfd->Filter = "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*";
-		//insert here the filter if you want
-		//ofd->Filter..
 		if (sfd->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
 			fileName = sfd->FileName;
 		}
@@ -157,6 +188,11 @@ System::Void StudentsTwo::MyForm::сохранитьToolStripMenuItem_Click(System::Objec
 	return System::Void();
 }
 
+
+/*
+* Способ закраска взят с просторов интернета для MS Studio C#, переделан на gui c++
+* Переделан топорно, необходимо доработать векторы, чтобы хранили point а не int
+*/
 System::Void StudentsTwo::MyForm::FloodFill(Bitmap^ bmp, Point pt, Color replacementColor)
 {
 	Color targetColor = bmp->GetPixel(pt.X, pt.Y);
@@ -217,18 +253,23 @@ System::Void StudentsTwo::MyForm::FloodFill(Bitmap^ bmp, Point pt, Color replace
 	return System::Void();
 }
 
+/*
+* Выбор способа закраски относительно CheckBox1
+*/
 System::Void StudentsTwo::MyForm::FloodFillLine(Bitmap^ bmp1, Point pt, Color replacementColor)
 {
 	if (checkBox1->Checked == true) {
+		//линейный, создаем два bitmap, один закрашываем в сплошную, второй оригинальный
 		Bitmap^ bmp = gcnew Bitmap(pictureBox1->Image);
 
 		FloodFill(bmp, pt, replacementColor);
 
+		//склеиваем bitmap -ы, чтобы получилась линейная закраска
 		for (int x = 1; x < bmp->Width; x++)
 		{
 			for (int y = 1; y < bmp->Height; y++)
 			{
-				if (bmp->GetPixel(x, y) != bmp1->GetPixel(x, y) && y % 30 < 15) {
+				if (bmp->GetPixel(x, y) != bmp1->GetPixel(x, y) && y % 30 < 15) { //условие линейной закраски
 					bmp1->SetPixel(x, y, replacementColor);
 				}
 			}
@@ -236,16 +277,44 @@ System::Void StudentsTwo::MyForm::FloodFillLine(Bitmap^ bmp1, Point pt, Color re
 	}
 	else
 	{
+		//обычная закраска
 		FloodFill(bmp1, pt, replacementColor);
 	}
-	pictureBox1->Image = bmp1;
-	pictureBox1->Refresh();
+	pictureBox1->Image = bmp1;// Перезаписываем bitmap
+	pictureBox1->Refresh();//обновляем pictureBox
 	return System::Void();
 }
 
+/*
+* Запоминаем выбор заливки
+*/
 System::Void StudentsTwo::MyForm::button1_Click(System::Object^ sender, System::EventArgs^ e)
 {
 	isFloodFill = true;
 	isEncircle = false;
+	return System::Void();
+}
+
+/*
+* Выход из программы
+*/
+System::Void StudentsTwo::MyForm::выходToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	return System::Void();
+}
+
+/*
+* Отображения окна с заданием
+*/
+System::Void StudentsTwo::MyForm::заданиеToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	return System::Void();
+}
+
+/*
+* Отображение сведений о программе
+*/
+System::Void StudentsTwo::MyForm::оПрограммеToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
+{
 	return System::Void();
 }

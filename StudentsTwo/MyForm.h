@@ -41,8 +41,8 @@ namespace StudentsTwo {
 	private: System::Windows::Forms::ToolStripMenuItem^ ñîõğàíèòüToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ ñîõğàíèòüÊàêToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ âûõîäToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^ îÏğîãğàììåToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^ ñïğàâêàToolStripMenuItem;
+
+
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
 	private: System::Windows::Forms::Button^ button1;
 	private: System::Windows::Forms::Button^ button2;
@@ -69,6 +69,8 @@ namespace StudentsTwo {
 		Pen^ MyPen; //Ïåğî äëÿ ğèñîâàíèÿ
 		Point p; //Ïîñëåäíÿÿ òî÷êà, ãäå ğèñîâàëè
 	private: System::Windows::Forms::CheckBox^ checkBox1;
+	private: System::Windows::Forms::ToolStripMenuItem^ çàäàíèåToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ îÏğîãğàììåToolStripMenuItem;
 		   System::String^ fileName;
 
 #pragma region Windows Form Designer generated code
@@ -84,8 +86,8 @@ namespace StudentsTwo {
 			this->ñîõğàíèòüToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->ñîõğàíèòüÊàêToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->âûõîäToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->çàäàíèåToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->îÏğîãğàììåToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->ñïğàâêàToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
@@ -102,9 +104,9 @@ namespace StudentsTwo {
 			// 
 			// menuStrip1
 			// 
-			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
 				this->ôàéëToolStripMenuItem,
-					this->îÏğîãğàììåToolStripMenuItem
+					this->çàäàíèåToolStripMenuItem, this->îÏğîãğàììåToolStripMenuItem
 			});
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
@@ -148,19 +150,21 @@ namespace StudentsTwo {
 			this->âûõîäToolStripMenuItem->Name = L"âûõîäToolStripMenuItem";
 			this->âûõîäToolStripMenuItem->Size = System::Drawing::Size(154, 22);
 			this->âûõîäToolStripMenuItem->Text = L"Âûõîä";
+			this->âûõîäToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::âûõîäToolStripMenuItem_Click);
+			// 
+			// çàäàíèåToolStripMenuItem
+			// 
+			this->çàäàíèåToolStripMenuItem->Name = L"çàäàíèåToolStripMenuItem";
+			this->çàäàíèåToolStripMenuItem->Size = System::Drawing::Size(64, 20);
+			this->çàäàíèåToolStripMenuItem->Text = L"Çàäàíèå";
+			this->çàäàíèåToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::çàäàíèåToolStripMenuItem_Click);
 			// 
 			// îÏğîãğàììåToolStripMenuItem
 			// 
-			this->îÏğîãğàììåToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->ñïğàâêàToolStripMenuItem });
 			this->îÏğîãğàììåToolStripMenuItem->Name = L"îÏğîãğàììåToolStripMenuItem";
 			this->îÏğîãğàììåToolStripMenuItem->Size = System::Drawing::Size(94, 20);
 			this->îÏğîãğàììåToolStripMenuItem->Text = L"Î ïğîãğàììå";
-			// 
-			// ñïğàâêàToolStripMenuItem
-			// 
-			this->ñïğàâêàToolStripMenuItem->Name = L"ñïğàâêàToolStripMenuItem";
-			this->ñïğàâêàToolStripMenuItem->Size = System::Drawing::Size(120, 22);
-			this->ñïğàâêàToolStripMenuItem->Text = L"Ñïğàâêà";
+			this->îÏğîãğàììåToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::îÏğîãğàììåToolStripMenuItem_Click);
 			// 
 			// pictureBox1
 			// 
@@ -311,5 +315,8 @@ namespace StudentsTwo {
 	private: System::Void FloodFill(Bitmap^ bmp, Point pt, Color replacementColor);
 	private: System::Void FloodFillLine(Bitmap^ bmp, Point pt, Color replacementColor);
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e);
+	private: System::Void âûõîäToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
+	private: System::Void çàäàíèåToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
+	private: System::Void îÏğîãğàììåToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
 };
 }
