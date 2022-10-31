@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "Unit.h"
+#include "InfoProgram.h"
 
 
 using namespace std;
@@ -307,6 +309,7 @@ System::Void StudentsTwo::MyForm::button1_Click(System::Object^ sender, System::
 */
 System::Void StudentsTwo::MyForm::âûõîäToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 {
+	this->Close();
 	return System::Void();
 }
 
@@ -315,6 +318,8 @@ System::Void StudentsTwo::MyForm::âûõîäToolStripMenuItem_Click(System::Object^ s
 */
 System::Void StudentsTwo::MyForm::çàäàíèåToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 {
+	Unit^ unit = gcnew Unit();
+	unit->Show();
 	return System::Void();
 }
 
@@ -323,5 +328,7 @@ System::Void StudentsTwo::MyForm::çàäàíèåToolStripMenuItem_Click(System::Object^
 */
 System::Void StudentsTwo::MyForm::îÏðîãðàììåToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 {
+	InfoProgram^ inf = gcnew InfoProgram();
+	inf->Show();
 	return System::Void();
 }
