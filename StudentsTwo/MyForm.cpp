@@ -5,6 +5,7 @@
 #include <vector>
 #include "Unit.h"
 #include "InfoProgram.h"
+#include <stack>
 
 
 using namespace std;
@@ -201,62 +202,41 @@ System::Void StudentsTwo::MyForm::сохранитьToolStripMenuItem_Click(System::Objec
 /*
 * Способ закраска взят с просторов интернета для MS Studio C#, переделан на gui c++
 * Переделан топорно, необходимо доработать векторы, чтобы хранили point а не int
+* Fix бага с закраской, ресурс https://simpledevcode.wordpress.com/2015/12/29/flood-fill-algorithm-using-c-net/
 */
-System::Void StudentsTwo::MyForm::FloodFill(Bitmap^ bmp, Point pt, Color replacementColor)
+System::Void StudentsTwo::MyForm::FloodFill(Bitmap^ bmp, Point pt, Color replacementColor, Color old)
 {
-	Color targetColor = bmp->GetPixel(pt.X, pt.Y);
-	if (targetColor.ToArgb().Equals(replacementColor.ToArgb()))
+	if (old.ToArgb().Equals(replacementColor.ToArgb()) || old.ToArgb().Equals(replacementColor.ToArgb()))
 	{
 		return;
 	}
-
-	vector <int> pixelsx;
-	vector <int> pixelsy;
-
-	//pixels.push_back(pt);
-	pixelsx.emplace_back(pt.X);
-	pixelsy.emplace_back(pt.Y);
-	while (pixelsx.size() != 0)
+	stack<int> pixelsX;
+	stack<int> pixelsY;
+	pixelsX.push(pt.X);
+	pixelsY.push(pt.Y);
+	while (pixelsX.size() > 0 && pixelsY.size() > 0)
 	{
-		Point temp = Point(pixelsx.back(), pixelsy.back());
-		pixelsx.pop_back(); pixelsy.pop_back();
-		int y1 = temp.Y;
-		while (y1 >= 0 && bmp->GetPixel(temp.X, y1) == targetColor)
-		{
-			y1--;
-		}
-		y1++;
-		bool spanLeft = false;
-		bool spanRight = false;
-		while (y1 < bmp->Height && bmp->GetPixel(temp.X, y1) == targetColor)
-		{
-			bmp->SetPixel(temp.X, y1, replacementColor);
+		int x = pixelsX.top();
+		int y = pixelsY.top();
+		pixelsX.pop();
+		pixelsY.pop();
+		if (x > 0 && x<pictureBox1->Width && y > 0 && y<pictureBox1->Height) {
+			if (bmp->GetPixel(x, y) == old) {
+				bmp->SetPixel(x, y, replacementColor);
 
-			if (!spanLeft && temp.X > 0 && bmp->GetPixel(temp.X - 1, y1) == targetColor)
-			{
-				//pixels.push_back(Point(temp.X - 1, y1));
-				pixelsx.emplace_back(temp.X - 1);
-				pixelsy.emplace_back(y1);
-				spanLeft = true;
-			}
-			else if (spanLeft && temp.X - 1 == 0 && bmp->GetPixel(temp.X - 1, y1) != targetColor)
-			{
-				spanLeft = false;
-			}
-			if (!spanRight && temp.X < bmp->Width - 1 && bmp->GetPixel(temp.X + 1, y1) == targetColor)
-			{
-				//pixels.push_back(Point(temp.X + 1, y1));
-				pixelsx.emplace_back(temp.X + 1);
-				pixelsy.emplace_back(y1);
-				spanRight = true;
-			}
-			else if (spanRight && temp.X < bmp->Width - 1 && bmp->GetPixel(temp.X + 1, y1) != targetColor)
-			{
-				spanRight = false;
-			}
-			y1++;
-		}
+				pixelsX.push(x-1);
+				pixelsY.push(y);
 
+				pixelsX.push(x+1);
+				pixelsY.push(y);
+
+				pixelsX.push(x);
+				pixelsY.push(y-1);
+
+				pixelsX.push(x);
+				pixelsY.push(y+1);
+			}
+		}
 	}
 
 	return System::Void();
@@ -271,7 +251,7 @@ System::Void StudentsTwo::MyForm::FloodFillLine(Bitmap^ bmp1, Point pt, Color re
 		//линейный, создаем два bitmap, один закрашываем в сплошную, второй оригинальный
 		Bitmap^ bmp = gcnew Bitmap(pictureBox1->Image);
 
-		FloodFill(bmp, pt, replacementColor);
+		FloodFill(bmp, pt, replacementColor, bmp->GetPixel(pt.X, pt.Y));
 
 		//склеиваем bitmap -ы, чтобы получилась линейная закраска
 		for (int x = 1; x < bmp->Width; x++)
@@ -287,7 +267,7 @@ System::Void StudentsTwo::MyForm::FloodFillLine(Bitmap^ bmp1, Point pt, Color re
 	else
 	{
 		//обычная закраска
-		FloodFill(bmp1, pt, replacementColor);
+		FloodFill(bmp1, pt, replacementColor, bmp1->GetPixel(pt.X, pt.Y));
 	}
 	pictureBox1->Image = bmp1;// Перезаписываем bitmap
 	pictureBox1->Refresh();//обновляем pictureBox
