@@ -77,9 +77,10 @@ System::Void StudentsTwo::MyForm::pictureBox1_Paint(System::Object^ sender, Syst
 */
 System::Void StudentsTwo::MyForm::pictureBox1_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e)
 {
+	if (pictureBox1->Image == nullptr) return; //Фикс бага, когда излюражение не выбрано
 	if (isFloodFill) {
 		//заливка
-		FloodFillLine(gcnew Bitmap(pictureBox1->Image), Point(e->X, e->Y), MyPen->Color);
+		FloodFillCheck(gcnew Bitmap(pictureBox1->Image), Point(e->X, e->Y), MyPen->Color);
 		return System::Void();
 	}
 	else {
@@ -242,27 +243,97 @@ System::Void StudentsTwo::MyForm::FloodFill(Bitmap^ bmp, Point pt, Color replace
 	return System::Void();
 }
 
+
+/*
+* Линейный алгоритм заливки взят с просторов интернета, переделан на gui c++
+* Переделан топорно, необходимо доработать векторы, чтобы хранили point а не int
+* Ресурс https://russianblogs.com/article/57151279792/
+*/
+System::Void StudentsTwo::MyForm::FloodFillLine(Bitmap^ bmp, int xmain, int ymain, Color replacementColor, Color old)
+{
+	if (old.ToArgb().Equals(replacementColor.ToArgb()) || old.ToArgb().Equals(replacementColor.ToArgb()))
+	{
+		return;
+	}
+
+
+	stack<int> pixelsX;
+	stack<int> pixelsY;
+	pixelsX.push(xmain);
+	pixelsY.push(ymain);
+	if (replacementColor.ToArgb() == old.ToArgb()) return;
+	while (pixelsX.size() > 0 && pixelsY.size() > 0)
+	{
+		int x = pixelsX.top();
+		int y = pixelsY.top();
+		pixelsX.pop();
+		pixelsY.pop();
+		if (bmp->GetPixel(x, y).ToArgb() != old.ToArgb()) continue;
+		int y1 = y;
+		while (y1 < bmp->Height && bmp->GetPixel(x, y1).ToArgb() == old.ToArgb())
+		{
+			bmp->SetPixel(x, y1, replacementColor);
+			y1++;
+		}
+		y1 = y - 1;
+		while (y1 >= 0 && bmp->GetPixel(x, y1).ToArgb() == old.ToArgb())
+		{
+			bmp->SetPixel(x, y1, replacementColor);
+			y1--;
+		}
+		y1 = y;
+		while (y1 < bmp->Height && bmp->GetPixel(x, y1).ToArgb() == replacementColor.ToArgb())
+		{
+			if (x > 0 && bmp->GetPixel(x - 1, y1) == old)
+			{
+				pixelsX.push(x - 1);
+				pixelsY.push(y1);
+			}
+			y1++;
+		}
+		y1 = y - 1;
+		while (y1 >= 0 && bmp->GetPixel(x, y1).ToArgb() == replacementColor.ToArgb())
+		{
+			if (x > 0 && bmp->GetPixel(x - 1, y1) == old)
+			{
+				pixelsX.push(x - 1);
+				pixelsY.push(y1);
+			}
+			y1--;
+		}
+
+		y1 = y;
+		while (y1 < bmp->Height && bmp->GetPixel(x, y1).ToArgb() == replacementColor.ToArgb())
+		{
+			if (x < bmp->Width - 1 && bmp->GetPixel(x + 1, y1) == old)
+			{
+				pixelsX.push(x + 1);
+				pixelsY.push(y1);
+			}
+			y1++;
+		}
+		y1 = y - 1;
+		while (y1 >= 0 && bmp->GetPixel(x, y1).ToArgb() == replacementColor.ToArgb())
+		{
+			if (x < bmp->Width - 1 && bmp->GetPixel(x + 1, y1) == old)
+			{
+				pixelsX.push(x + 1);
+				pixelsY.push(y1);
+			}
+			y1--;
+		}
+	}
+	return System::Void();
+}
+
 /*
 * Выбор способа закраски относительно CheckBox1
 */
-System::Void StudentsTwo::MyForm::FloodFillLine(Bitmap^ bmp1, Point pt, Color replacementColor)
+System::Void StudentsTwo::MyForm::FloodFillCheck(Bitmap^ bmp1, Point pt, Color replacementColor)
 {
 	if (checkBox1->Checked == true) {
 		//линейный, создаем два bitmap, один закрашываем в сплошную, второй оригинальный
-		Bitmap^ bmp = gcnew Bitmap(pictureBox1->Image);
-
-		FloodFill(bmp, pt, replacementColor, bmp->GetPixel(pt.X, pt.Y));
-
-		//склеиваем bitmap -ы, чтобы получилась линейная закраска
-		for (int x = 1; x < bmp->Width; x++)
-		{
-			for (int y = 1; y < bmp->Height; y++)
-			{
-				if (bmp->GetPixel(x, y) != bmp1->GetPixel(x, y) && y % 30 < 15) { //условие линейной закраски
-					bmp1->SetPixel(x, y, replacementColor);
-				}
-			}
-		}
+		FloodFillLine(bmp1, pt.X, pt.Y, replacementColor, bmp1->GetPixel(pt.X, pt.Y));
 	}
 	else
 	{

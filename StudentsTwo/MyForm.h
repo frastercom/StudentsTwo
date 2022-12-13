@@ -313,7 +313,8 @@ namespace StudentsTwo {
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void ÒÓı‡ÌËÚ¸ToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void FloodFill(Bitmap^ bmp, Point pt, Color replacementColor, Color old);
-	private: System::Void FloodFillLine(Bitmap^ bmp, Point pt, Color replacementColor);
+	private: System::Void FloodFillLine(Bitmap^ bmp, int x, int y, Color replacementColor, Color old);
+	private: System::Void FloodFillCheck(Bitmap^ bmp, Point pt, Color replacementColor);
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void ‚˚ıÓ‰ToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void Á‡‰‡ÌËÂToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
