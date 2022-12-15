@@ -221,7 +221,7 @@ System::Void StudentsTwo::MyForm::FloodFill(Bitmap^ bmp, Point pt, Color replace
 		int y = pixelsY.top();
 		pixelsX.pop();
 		pixelsY.pop();
-		if (x > 0 && x<pictureBox1->Width && y > 0 && y<pictureBox1->Height) {
+		if (x > 0 && x<bmp->Width && y > 0 && y<bmp->Height) {
 			if (bmp->GetPixel(x, y) == old) {
 				bmp->SetPixel(x, y, replacementColor);
 
